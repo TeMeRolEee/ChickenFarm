@@ -8,8 +8,6 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5Widgets HINTS ~/Qt/5.11.1/gcc_64/)
 
-
-
-add_executable(ChickenFarm main.cpp)
+add_executable(ChickenFarm main.cpp Chicken.cpp Farm.cpp)
 
 target_link_libraries(ChickenFarm Qt5::Widgets)
