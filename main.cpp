@@ -5,10 +5,14 @@
 int main(int argc, char* argv[])
 {
     QCoreApplication application(argc,argv);
-    //Chicken *chicken = new Chicken(1);
+    /*Chicken *chicken = new Chicken();
+    chicken->doWork_slot();
+    qDebug() <<  "Egg count:" << chicken->getEggCount();
+    qDebug() << "Chicken interval:" << chicken->getInterval();
     qDebug() << "Let's start!";
-
-    Farm* farm = new Farm;
+    */
+    //chicken->layEgg_slot();
+    //Farm* farm = new Farm;
 
     return application.exec();
 }

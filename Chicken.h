@@ -10,6 +10,12 @@ private:
     bool stopper= false;
     int interval;
     QTimer qTimer;
+    int id;
+public:
+    int getId() const;
+
+    void setId(int id);
+
 public:
     int getInterval() const;
 
@@ -24,10 +30,10 @@ public:
 
 public slots:
     void doWork_slot();
-    void kill_slot();
+    void kill_slot() const;
     void layEgg_slot();
 signals:
-
+    //void
 };
 
 
