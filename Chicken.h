@@ -2,12 +2,12 @@
 
 #include <QtCore>
 
-class Chicken : public QObject
+class Chicken : public QRunnable
 {
     Q_OBJECT
+
 private:
-    QThread qThread;
-    bool stopper= false;
+    //QThread qThread;
     int interval;
     QTimer qTimer;
     int id;
@@ -25,15 +25,18 @@ public:
 private:
     int eggCount;
 public:
-    Chicken();
+    Chicken(int id);
     ~Chicken();
 
 public slots:
     void doWork_slot();
     void kill_slot() const;
     void layEgg_slot();
+
+    void run() override;
+
 signals:
-    //void
+
 };
 
 

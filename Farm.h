@@ -7,13 +7,15 @@ class Farm : public QObject
 {
     Q_OBJECT
 private:
-    QMap<int , Chicken*> *chickens;
+    QMap<int, Chicken*> chickens;
+    QThreadPool qThreadPool;
+    int size=0;
 
 public:
     Farm();
     ~Farm();
 
-    void addChicken(Chicken &chicken);
+    void addChicken();
     void killChicken(int id);
     void showChickens();
 
