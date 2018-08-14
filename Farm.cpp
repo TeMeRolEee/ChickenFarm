@@ -8,23 +8,22 @@ Farm::~Farm() {
 }
 
 void Farm::addChicken() {
-    //Chicken *chicken = ;
-    qDebug() << "Number of chickens:" << size;
+    qDebug() << "Number of chickens:" << idx;
 
-    Chicken chicken(++size);
+    Chicken *chicken = new Chicken(++idx);
+    chickens.insert(idx,chicken);
 
-    chickens.insert(size,&chicken);
-    qThreadPool.globalInstance()->start(chickens.value(size));
-    //threads.insert(size , qThread);
-    //chickens.value(size)->moveToThread(threads.value(size));
+    //QThread *chickenThread = new QThread;
+    threads.insert(idx , new QThread);
 
-    //chickens.value(size)->doWork_slot();
+    chickens.value(idx)->moveToThread(threads.value(idx));
+    connect(threads.value(idx), &QThread::finished, chickens.value(idx), &QObject::deleteLater);
+    connect(this, &Farm::doWork, chickens.value(idx), &Chicken::doWork_slot);
+    threads.value(idx)->start();
 
-    //Chicken chicken(++size);
-    //chickens->insert(size, chicken);
-    //chickens->value(size);
 
-    qDebug() << "Number of chickens:" << size;
+    //QObject::connect(&qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
+    qDebug() << "Number of chickens:" << idx;
 
 }
 
@@ -48,8 +47,9 @@ void Farm::killChicken(int id) {
 
     if(chickens.find(id) != chickens.end())
     {
-        chickens.value(id)->kill_slot();
-        delete chickens.value(id);
+        threads.value(id)->quit();
+        threads.value(id)->wait();
+        //delete chickens.value(id);
         chickens.remove(id);
         qDebug() << "This chicken will not lay any eggs anymore.";
         qDebug() << "Rest in peace.";

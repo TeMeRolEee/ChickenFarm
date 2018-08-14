@@ -1,4 +1,4 @@
-#include <QtWidgets>
+#include <QtCore>
 #include "Chicken.h"
 #include "Farm.h"
 
@@ -18,8 +18,6 @@ int main(int argc, char* argv[])
     farm->addChicken();
     farm->addChicken();
     farm->addChicken();
-
-
 
     return application.exec();
 }

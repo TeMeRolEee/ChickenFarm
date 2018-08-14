@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QtWidgets>
+#include <QtCore>
 #include "Chicken.h"
 
 class Farm : public QObject
@@ -8,8 +8,9 @@ class Farm : public QObject
     Q_OBJECT
 private:
     QMap<int, Chicken*> chickens;
-    QThreadPool qThreadPool;
-    int size=0;
+    QMap<int, QThread*> threads;
+
+    int idx=0;
 
 public:
     Farm();
@@ -19,10 +20,8 @@ public:
     void killChicken(int id);
     void showChickens();
 
-public slots:
-
 signals:
-
+    void doWork();
 
 };
 

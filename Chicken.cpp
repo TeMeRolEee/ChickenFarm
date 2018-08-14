@@ -17,17 +17,18 @@ Chicken::Chicken(int id)
     qTimer.start();
     //connect(&qThread, SIGNAL(started()), this, SLOT(doWork_slot()));
     qThread.start();*/
-
+    qTimer.setInterval(interval);
 }
 
 void Chicken::doWork_slot() {
+    qDebug() << "ChickenId:" << id << "threadID:" << QThread::currentThreadId();
 
+    QObject::connect(&qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
+    qTimer.start();
 }
 
 Chicken::~Chicken() {
     qTimer.stop();
-    //qThread.quit();
-    //qThread.wait();
 }
 
 int Chicken::getInterval() const {
@@ -57,13 +58,6 @@ void Chicken::setId(int id) {
     Chicken::id = id;
 }
 
-void Chicken::run() {
-
-    qDebug() << "ChickenId:" << id << "threadID:" << QThread::currentThreadId();
-    qTimer.setInterval(interval);
-    QObject::connect(&qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
-    qTimer.start();
-}
 
 
 

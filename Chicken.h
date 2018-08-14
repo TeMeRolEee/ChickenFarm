@@ -2,40 +2,31 @@
 
 #include <QtCore>
 
-class Chicken : public QRunnable
+class Chicken : public QObject
 {
     Q_OBJECT
-
 private:
-    //QThread qThread;
     int interval;
     QTimer qTimer;
     int id;
-public:
-    int getId() const;
-
-    void setId(int id);
-
-public:
-    int getInterval() const;
-
-    int getEggCount() const;
-
-
-private:
     int eggCount;
+
 public:
     Chicken(int id);
     ~Chicken();
+
+    int getId() const;
+    void setId(int id);
+    int getInterval() const;
+    int getEggCount() const;
 
 public slots:
     void doWork_slot();
     void kill_slot() const;
     void layEgg_slot();
-
-    void run() override;
-
+    void layEggNow_slot();
 signals:
+    void layEgg_signal(const int &value);
 
 };
 
