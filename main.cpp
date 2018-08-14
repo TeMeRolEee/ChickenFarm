@@ -1,9 +1,9 @@
-#include <QtCore>
-#include "Chicken.h"
+#include <QCoreApplication>
+#include <QDebug>
+#include <QtCore/QThread>
 #include "Farm.h"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     QCoreApplication application(argc,argv);
 /*
     Chicken *chicken = new Chicken(0);
@@ -18,6 +18,8 @@ int main(int argc, char* argv[])
     farm->addChicken();
     farm->addChicken();
     farm->addChicken();
+
+
 
     return application.exec();
 }

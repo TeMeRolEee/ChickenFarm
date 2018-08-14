@@ -1,65 +1,49 @@
 #include "Chicken.h"
 
+#include <QDebug>
+#include <QtCore/QThread>
 
-Chicken::Chicken(int id)
-    :eggCount(0)
+Chicken::Chicken(int id, int interval) :  interval(interval), id(id)
 {
-    setId(id);
-    QRandomGenerator generator;
-    QDateTime seed;
-    quint32 seedNumber = static_cast<quint32>(seed.currentMSecsSinceEpoch()) + id*100;
-    generator.seed(seedNumber);
-    qDebug() << seedNumber;
-    interval = generator.bounded(1000,12500);
-    qDebug() << "Chicken added, interval" <<  (qreal)interval/1000 << "seconds";
-    //moveToThread(&qThread);
-    /*qTimer.setInterval(interval);
-    qTimer.start();
-    //connect(&qThread, SIGNAL(started()), this, SLOT(doWork_slot()));
-    qThread.start();*/
-    qTimer.setInterval(interval);
+    qDebug() << "constructor threadID:" << QThread::currentThreadId();
+}
+
+Chicken::~Chicken()
+{
+    //qTimer.stop();
 }
 
 void Chicken::doWork_slot() {
-    qDebug() << "ChickenId:" << id << "threadID:" << QThread::currentThreadId();
-
-    QObject::connect(&qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
+    QTimer qTimer;
+    qTimer.setInterval(interval);
+    QObject::connect(&qTimer, &QTimer::timeout, this, &Chicken::layEggNow_slot);
+    qDebug() << "chicken" << id << "has started laying eggs on thread" << QThread::currentThreadId();
+    qTimer.moveToThread(QThread::currentThread());
     qTimer.start();
+    qDebug() << "qtimer:" << QThread::currentThreadId();
+    while (true)
+    {
+        if(qTimer.remainingTime() == 0)
+        {
+            layEggNow_slot();
+            qTimer.stop();
+            qTimer.start();
+        }
+        //qDebug() << qTimer.remainingTime() << "working";
+    }
 }
+/*
+void Chicken::layEgg_signal(const int &value) {
 
-Chicken::~Chicken() {
-    qTimer.stop();
-}
-
-int Chicken::getInterval() const {
-    return interval;
-}
+}*/
 
 int Chicken::getEggCount() const {
     return eggCount;
 }
 
-void Chicken::kill_slot() const {
-    delete this;
-}
-
-void Chicken::layEgg_slot() {
-    qDebug() << "Chicken " << id << "layed an egg.";
+void Chicken::layEggNow_slot() {
     eggCount++;
-    qDebug() << "Number of eggs:" << getEggCount();
-
+    //qDebug() << "chicken" << id << "has layed an egg";
+    emit layEgg_signal(id);
 }
-
-int Chicken::getId() const {
-    return id;
-}
-
-void Chicken::setId(int id) {
-    Chicken::id = id;
-}
-
-
-
-
-
 

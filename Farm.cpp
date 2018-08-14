@@ -1,69 +1,48 @@
+
+
+#include <QtCore/QRandomGenerator>
+#include <QtCore/QDateTime>
+#include <QtCore/QThread>
+#include <QDebug>
 #include "Farm.h"
-#include "Chicken.h"
 
 Farm::Farm() {
+
 }
 
 Farm::~Farm() {
+
+}
+
+void Farm::handleEmits(const int &value) {
+    qDebug() << "Chicken" << value << "has layed an egg";
 }
 
 void Farm::addChicken() {
-    qDebug() << "Number of chickens:" << idx;
+    QRandomGenerator generator;
+    QDateTime seed;
+    quint32 seedNumber = static_cast<quint32>(seed.currentMSecsSinceEpoch());
+    generator.seed(seedNumber);
+    qDebug() << seedNumber;
+    int interval = generator.bounded(1000,12500);
+    qDebug() << "Farm thread ID:" << QThread::currentThreadId();
 
-    Chicken *chicken = new Chicken(++idx);
-    chickens.insert(idx,chicken);
+    Chicken *chicken = new Chicken(++idx,interval);
+    qDebug() << "Chicken" << idx <<" added, interval" <<  (qreal)interval/1000 << "seconds";
+    chickens.insert(idx, chicken);
 
-    //QThread *chickenThread = new QThread;
-    threads.insert(idx , new QThread);
+    threads.insert(idx, new QThread);
 
     chickens.value(idx)->moveToThread(threads.value(idx));
-    connect(threads.value(idx), &QThread::finished, chickens.value(idx), &QObject::deleteLater);
-    connect(this, &Farm::doWork, chickens.value(idx), &Chicken::doWork_slot);
+
     threads.value(idx)->start();
+    connect(threads.value(idx), &QThread::finished, chickens.value(idx), &QObject::deleteLater);
+    connect(threads.value(idx), &QThread::started, chickens.value(idx), &Chicken::doWork_slot);
+    connect(chickens.value(idx), &Chicken::layEgg_signal, this, &Farm::handleEmits);
+    //connect(chickens.value(idx), &Chicken::layEgg_signal, chickens.value(idx), &Chicken::doWork_slot);
 
+    qDebug() << threads.value(idx)->isRunning();
+    //chickens.value(idx)->layEggNow_slot();
+    //chickens.value(idx)->doWork_slot();
 
-    //QObject::connect(&qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
-    qDebug() << "Number of chickens:" << idx;
-
-}
-
-void Farm::killChicken(int id) {
-    /*int temp;
-    for(auto *item : *chickens)
-    {
-        if(item->getId() == id)
-        {
-            chickens->value(id)->kill_slot();
-            chickens->removeAt(temp);
-            qDebug() << "This chicken will not lay any eggs anymore.";
-            qDebug() << "Rest in peace.";
-        }
-        else
-        {
-            qDebug() << "There is no chicken with this particular ID, you might have mistyped it.";
-        }
-        temp++;
-    }*/
-
-    if(chickens.find(id) != chickens.end())
-    {
-        threads.value(id)->quit();
-        threads.value(id)->wait();
-        //delete chickens.value(id);
-        chickens.remove(id);
-        qDebug() << "This chicken will not lay any eggs anymore.";
-        qDebug() << "Rest in peace.";
-    }
-    else
-    {
-        qDebug() << "There is no chicken with this particular ID, you might have mistyped it.";
-    }
-
-}
-
-void Farm::showChickens() {
-    for(auto *item : chickens)
-    {
-        qDebug() << "Chicken" << item->getId() << "has" << item->getEggCount() << "eggs.";
-    }
 }
