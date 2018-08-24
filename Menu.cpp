@@ -53,14 +53,13 @@ int Menu::menuHandler() {
 
 void Menu::helper() {
     qDebug() << "Available commands:";
-    qDebug() << "> Add chicken: 1";
-    qDebug() << "> Kill chicken: 2 <ID>";
-    qDebug() << "> Kill every chicken: 3";
-    qDebug() << "> List chickens: 4";
-    qDebug() << "> List a specified chicken: 5 <ID>";
-    qDebug() << "> Make a chicken lay an egg: 6 <ID>";
-    qDebug() << "> HELP";
-    qDebug() << ">EXIT: 0";
+    qDebug() << "0 > EXIT";
+    qDebug() << "1 > Add chicken";
+    qDebug() << "2 <ID> > Kill chicken";
+    qDebug() << "3 > Kill every chicken";
+    qDebug() << "4 > List chickens";
+    qDebug() << "5 <ID> > List a specified chicken";
+    qDebug() << "6 <ID> > Make a chicken lay an egg";
 }
 
 
