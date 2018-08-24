@@ -53,4 +53,8 @@ void Chicken::getThreadId() {
     qDebug() << "chicken id:" << id << "threadID:" << QThread::currentThreadId();
 }
 
+void Chicken::killMe_slot() {
+    qTimer->stop();
+}
+
 

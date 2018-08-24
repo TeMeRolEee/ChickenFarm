@@ -36,6 +36,8 @@ public slots:
 
     void layEgg_slot();
 
+    void killMe_slot();
+
 signals:
 
     void layEgg_signal(const int &value);

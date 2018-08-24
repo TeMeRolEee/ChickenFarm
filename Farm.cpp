@@ -24,7 +24,7 @@ void Farm::addChicken() {
 
     chickens.value(chickenCount)->moveToThread(threads.value(chickenCount));
 
-    connect(threads.value(chickenCount), &QThread::finished, chickens.value(chickenCount), &QObject::deleteLater);
+    connect(threads.value(chickenCount), &QThread::finished, chickens.value(chickenCount), &Chicken::killMe_slot);
     connect(this, &Farm::operate_signal, chickens.value(chickenCount), &Chicken::doWork_slot);
     connect(threads.value(chickenCount), &QThread::started, chickens.value(chickenCount), &Chicken::doWork_slot);
     threads.value(chickenCount)->start();
@@ -35,11 +35,8 @@ void Farm::addChicken() {
 void Farm::killChicken(const int &id) {
     threads[id]->quit();
     threads[id]->wait();
-    delete threads[id];
-    threads.remove(id);
 
-    delete chickens[id];
-    chickens.remove(id);
+    delete chickens.take(id);
 }
 
 void Farm::listChicken(const int &id) {

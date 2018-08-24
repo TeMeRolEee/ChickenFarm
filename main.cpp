@@ -22,26 +22,7 @@ int getInput() {
 }
 
 int main(int argc, char *argv[]) {
-    QCoreApplication application(argc, argv);/*
-    qDebug() << "mainthread" << QThread::currentThreadId();
-    Chicken chicken(0);
-    qDebug() <<  "Egg count:" << chicken.getEggCount();
-    qDebug() << "Chicken interval:" << chicken.getInterval() << "msec";
-    Chicken chicken1(1);
-    qDebug() <<  "Egg count:" << chicken1.getEggCount();
-    qDebug() << "Chicken interval:" << chicken1.getInterval() << "msec";
-    qDebug() << "Let's start!";
-
-    Farm *farm = new Farm;
-
-    farm->addChicken();
-    QThread::sleep(1);
-    farm->addChicken();
-    QThread::sleep(1);
-    farm->addChicken();
-    QThread::sleep(1);
-    farm->addChicken();
-*/
+    QCoreApplication application(argc, argv);
     Farm *farm = new Farm();
     Menu *menu = new Menu;
 
@@ -60,9 +41,11 @@ int main(int argc, char *argv[]) {
                 farm->killChicken(getInput());
                 break;
             case Cases::LISTCHICKEN:
+                QProcess::execute("clear");
                 farm->listChicken(getInput());
                 break;
             case Cases::LISTALLCHICKEN:
+                QProcess::execute("clear");
                 farm->listAllChickens();
                 break;
             case Cases::LAYEGGNOW:
