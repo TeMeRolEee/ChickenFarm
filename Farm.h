@@ -8,19 +8,25 @@
 class Farm : public QObject {
 Q_OBJECT
 private:
-    QMap<int, Chicken*> chickens;
-    QMap<int, QThread*> threads;
+    QMap<int, Chicken *> chickens;
+    QMap<int, QThread *> threads;
     int chickenCount = 0;
 
 public:
     Farm();
+
     ~Farm();
 
     void addChicken();
+
     void killChicken(const int &id);
+
     void listChicken(const int &id);
+
     void listAllChickens();
+
     void layEggNow(const int &id);
+
     void killAllChickens();
 
 public slots:
@@ -30,6 +36,7 @@ public slots:
 signals:
 
     void operate_signal();
+
     void stopChicken_signal();
 };
 

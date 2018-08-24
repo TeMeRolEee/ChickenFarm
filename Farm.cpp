@@ -33,13 +33,13 @@ void Farm::addChicken() {
 }
 
 void Farm::killChicken(const int &id) {
-        threads[id]->quit();
-        threads[id]->wait();
-        delete threads[id];
-        threads.remove(id);
+    threads[id]->quit();
+    threads[id]->wait();
+    delete threads[id];
+    threads.remove(id);
 
-        delete chickens[id];
-        chickens.remove(id);
+    delete chickens[id];
+    chickens.remove(id);
 }
 
 void Farm::listChicken(const int &id) {

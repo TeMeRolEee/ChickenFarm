@@ -10,14 +10,9 @@ Chicken::Chicken(const int &id) : id(id) {
     QDateTime seed;
     quint32 seedNumber = static_cast<quint32>(seed.currentMSecsSinceEpoch());
     generator.seed(seedNumber);
-    interval = generator.bounded(1000,12500);
-    qDebug() << "Chicken added, interval" <<  (qreal)interval/1000 << "seconds";
+    interval = generator.bounded(1000, 12500);
+    qDebug() << "Chicken added, interval" << (qreal) interval / 1000 << "seconds";
     qDebug() << id << QThread::currentThreadId();
-/*
-    moveToThread(&qThread);
-    qTimer = new QTimer(&qThread);
-    //qTimer.moveToThread(&qThread);*/
-
 }
 
 Chicken::~Chicken() {
