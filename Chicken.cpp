@@ -22,6 +22,7 @@ Chicken::Chicken(const int &id) : id(id) {
 
 Chicken::~Chicken() {
     qTimer->stop();
+    delete qTimer;
 }
 
 int Chicken::getId() const {

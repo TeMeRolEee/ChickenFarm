@@ -8,6 +8,6 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5Core HINTS ~/Qt/5.11.1/gcc_64/)
 
-add_executable(ChickenFarm_v2 main.cpp Chicken.cpp Farm.cpp Menu.cpp Menu.h)
+add_executable(ChickenFarm_v2 main.cpp Chicken.cpp Farm.cpp Menu.cpp)
 
 target_link_libraries(ChickenFarm_v2 Qt5::Core)

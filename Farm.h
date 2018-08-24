@@ -11,14 +11,17 @@ private:
     QMap<int, Chicken*> chickens;
     QMap<int, QThread*> threads;
     int chickenCount = 0;
+
 public:
     Farm();
-
     ~Farm();
 
     void addChicken();
     void killChicken(const int &id);
-    void getChicken(const int &id);
+    void listChicken(const int &id);
+    void listAllChickens();
+    void layEggNow(const int &id);
+    void killAllChickens();
 
 public slots:
 
