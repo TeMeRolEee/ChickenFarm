@@ -12,32 +12,30 @@ private:
     QMap<int, QThread *> threads;
     int chickenCount = 0;
 
+    bool findChicken(const int &id);
+
+protected:
+    void printChicken(Chicken *chicken);
+
+    void killChicken(Chicken *chicken);
+
+
 public:
-    Farm();
-
-    ~Farm();
-
     void addChicken();
 
     void killChicken(const int &id);
 
-    void listChicken(const int &id);
+    void printChicken(const int &id);
 
-    void listAllChickens();
+    void printAllChickens();
 
     void layEggNow(const int &id);
 
     void killAllChickens();
 
-public slots:
-
-    void handleEmits_slot(const int &value);
-
 signals:
 
-    void operate_signal();
-
-    void stopChicken_signal();
+    void layEgg_signal();
 };
 
 

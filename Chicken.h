@@ -16,10 +16,6 @@ private:
 public:
     Chicken(const int &id);
 
-    Chicken(const Chicken &otherChicken);
-
-    Chicken();
-
     ~Chicken();
 
     int getId() const;
@@ -35,11 +31,5 @@ public slots:
     void doWork_slot();
 
     void layEgg_slot();
-
-    void killMe_slot();
-
-signals:
-
-    void layEgg_signal(const int &value);
 };
 

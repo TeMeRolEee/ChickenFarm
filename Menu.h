@@ -2,13 +2,11 @@
 
 class Menu {
 public:
-    Menu();
-
-    ~Menu();
-
     int menuHandler();
 
-    void helper();
+    int getInput();
+
+    void printMenu();
 };
 
 

@@ -7,8 +7,7 @@
 
 Chicken::Chicken(const int &id) : id(id) {
     QRandomGenerator generator;
-    QDateTime seed;
-    quint32 seedNumber = static_cast<quint32>(seed.currentMSecsSinceEpoch());
+    auto seedNumber = static_cast<quint32>(QDateTime::currentMSecsSinceEpoch());
     generator.seed(seedNumber);
     interval = generator.bounded(1000, 12500);
     qDebug() << "Chicken added, interval" << (qreal) interval / 1000 << "seconds";
@@ -40,10 +39,6 @@ int Chicken::getInterval() const {
     return interval;
 }
 
-Chicken::Chicken() {
-
-}
-
 void Chicken::layEgg_slot() {
     eggCount++;
     qDebug() << "Chicken ID:" << id << "Egg count:" << eggCount << " threadID:" << QThread::currentThreadId();
@@ -51,10 +46,6 @@ void Chicken::layEgg_slot() {
 
 void Chicken::getThreadId() {
     qDebug() << "chicken id:" << id << "threadID:" << QThread::currentThreadId();
-}
-
-void Chicken::killMe_slot() {
-    qTimer->stop();
 }
 
 

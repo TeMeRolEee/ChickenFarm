@@ -1,55 +1,51 @@
 #include <QCoreApplication>
-#include <QDebug>
 #include <QtCore/QThread>
 #include <QtCore/QProcess>
+#include <QDebug>
+
+#include <iostream>
+
 #include "Farm.h"
 #include "Menu.h"
-
-enum Cases {
-    EXIT,
-    ADDCHICKEN,
-    KILLCHICKEN,
-    KILLALLCHICKEN,
-    LISTCHICKEN,
-    LISTALLCHICKEN,
-    LAYEGGNOW
-};
-
-int getInput() {
-    qDebug() << "Please give me an ID";
-    QTextStream stream(stdin);
-    return stream.readLine().toInt();
-}
+#include "cases.h"
 
 int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
-    Farm *farm = new Farm();
-    Menu *menu = new Menu;
+    auto *farm = new Farm;
+    auto *menu = new Menu;
 
     while (true) {
-        switch (menu->menuHandler()) {
-            case Cases::EXIT:
+        int input = menu->menuHandler();
+        switch (input) {
+            case static_cast<int>(Cases::EXIT):
                 farm->killAllChickens();
+                delete farm;
+                delete menu;
                 return 0;
-            case Cases::ADDCHICKEN:
+            case static_cast<int>(Cases::ADD_CHICKEN):
+                std::cout << "Making a chicken" << std::endl;
                 farm->addChicken();
                 break;
-            case Cases::KILLALLCHICKEN:
+            case static_cast<int>(Cases::KILL_ALL_CHICKEN):
+                std::cout << "Killing every chicken" << std::endl;
                 farm->killAllChickens();
                 break;
-            case Cases::KILLCHICKEN:
-                farm->killChicken(getInput());
+            case static_cast<int>(Cases::KILL_CHICKEN):
+                std::cout << "Killing a chicken" << std::endl;
+                farm->killChicken(menu->getInput());
                 break;
-            case Cases::LISTCHICKEN:
+            case static_cast<int>(Cases::LIST_CHICKEN):
                 QProcess::execute("clear");
-                farm->listChicken(getInput());
+                farm->printChicken(menu->getInput());
                 break;
-            case Cases::LISTALLCHICKEN:
+            case static_cast<int>(Cases::LIST_ALL_CHICKEN):
                 QProcess::execute("clear");
-                farm->listAllChickens();
+                farm->printAllChickens();
                 break;
-            case Cases::LAYEGGNOW:
-                farm->layEggNow(getInput());
+            case static_cast<int>(Cases::LAY_EGG_NOW):
+                farm->layEggNow(menu->getInput());
+            default:
+                break;
         }
     }
 }

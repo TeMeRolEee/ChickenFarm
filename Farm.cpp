@@ -4,60 +4,67 @@
 #include <QDebug>
 #include "Farm.h"
 
-Farm::Farm() {
-
-}
-
-Farm::~Farm() {
-}
-
-void Farm::handleEmits_slot(const int &value) {
-    qDebug() << "Chicken" << value << "has layed an egg";
-}
-
 void Farm::addChicken() {
-    Chicken *chicken = new Chicken(chickenCount);
+    auto *chicken = new Chicken(chickenCount);
     chickens.insert(chickenCount, chicken);
 
-    QThread *qThread = new QThread();
+    auto *qThread = new QThread();
     threads.insert(chickenCount, qThread);
 
     chickens.value(chickenCount)->moveToThread(threads.value(chickenCount));
-
-    connect(threads.value(chickenCount), &QThread::finished, chickens.value(chickenCount), &Chicken::killMe_slot);
-    connect(this, &Farm::operate_signal, chickens.value(chickenCount), &Chicken::doWork_slot);
-    connect(threads.value(chickenCount), &QThread::started, chickens.value(chickenCount), &Chicken::doWork_slot);
+    connect(this, &Farm::layEgg_signal, chicken, &Chicken::layEgg_slot);
+    connect(qThread, &QThread::started, chicken, &Chicken::doWork_slot);
     threads.value(chickenCount)->start();
 
     chickenCount++;
 }
 
 void Farm::killChicken(const int &id) {
+    if (findChicken(id)) {
+        killChicken(chickens.value(id));
+    } else {
+        qDebug() << "No such chicken in this farm. Try killing an other one.";
+    }
+}
+
+void Farm::killChicken(Chicken *chicken) {
+    int id = chicken->getId();
     threads[id]->quit();
     threads[id]->wait();
 
     delete chickens.take(id);
+    delete threads.take(id);
 }
 
-void Farm::listChicken(const int &id) {
-    qDebug() << "Chicken ID:" << chickens.value(id)->getId() << "eggcount:" << chickens.value(id)->getEggCount()
-             << "interval:" << chickens.value(id)->getInterval();
+void Farm::printChicken(const int &id) {
+    if (findChicken(id)) {
+        printChicken(chickens.value(id));
+    }
 }
 
-void Farm::listAllChickens() {
-    for (auto item : chickens.keys()) {
-        listChicken(item);
+void Farm::printChicken(Chicken *chicken) {
+    qDebug() << "Chicken ID:" << chicken->getId() << "eggcount:" << chicken->getEggCount()
+             << "interval:" << chicken->getInterval();
+}
+
+void Farm::printAllChickens() {
+    for (auto *chicken : chickens) {
+        printChicken(chicken);
     }
 }
 
 void Farm::layEggNow(const int &id) {
-    chickens.value(id)->layEgg_slot();
+    emit layEgg_signal();
 }
 
 void Farm::killAllChickens() {
-    for (auto item : chickens.keys()) {
-        killChicken(item);
+    for (auto *chicken : chickens) {
+        killChicken(chicken);
     }
+}
+
+bool Farm::findChicken(const int &id) {
+    return chickens.find(id) != chickens.end();
 }
 
 
