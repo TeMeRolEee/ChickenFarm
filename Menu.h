@@ -1,16 +1,12 @@
 #pragma once
 
-#import "Farm.h"
-
 class Menu {
-private:
-
 public:
+    int menuHandler();
 
-    Menu();
-    ~Menu();
+    int getInput();
 
-
+    void printMenu();
 };
 
 

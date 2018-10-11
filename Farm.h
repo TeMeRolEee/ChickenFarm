@@ -8,26 +8,32 @@
 class Farm : public QObject {
 Q_OBJECT
 private:
-    QMap<int, Chicken*> chickens;
-    QMap<int, QThread*> threads;
+    QMap<int, Chicken *> chickens;
+    QMap<int, QThread *> threads;
     int chickenCount = 0;
+
+    bool findChicken(const int &id);
+
+protected:
+    void killChicken(Chicken &chicken);
+
 public:
-    Farm();
-
-    ~Farm();
-
     void addChicken();
+
     void killChicken(const int &id);
-    void getChicken(const int &id);
 
-public slots:
+    void printChicken(const int &id);
 
-    void handleEmits_slot(const int &value);
+    void printAllChickens();
+
+    void layEggNow(const int &id);
+
+    void killAllChickens();
 
 signals:
+    void layEgg_signal(const int &id);
 
-    void operate_signal();
-    void stopChicken_signal();
+    void printChicken_signal(const int &id);
 };
 
 
