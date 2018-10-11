@@ -24,12 +24,21 @@ public:
 
     int getInterval() const;
 
-    void getThreadId();
-
 public slots:
 
     void doWork_slot();
 
     void layEgg_slot();
+
+    void printChicken_slot(const int &id);
+
+    void killChicken_slot();
+
+signals:
+
+    void printChicken_signal(const int &id);
+
+    void sendNotification_signal(const QString string);
+
 };
 

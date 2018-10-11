@@ -2,6 +2,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QThread>
 #include <QDebug>
+#include <iostream>
 #include "Farm.h"
 
 void Farm::addChicken() {
@@ -12,8 +13,12 @@ void Farm::addChicken() {
     threads.insert(chickenCount, qThread);
 
     chickens.value(chickenCount)->moveToThread(threads.value(chickenCount));
+
     connect(this, &Farm::layEgg_signal, chicken, &Chicken::layEgg_slot);
     connect(qThread, &QThread::started, chicken, &Chicken::doWork_slot);
+    connect(this, &Farm::printChicken_signal, chicken, &Chicken::printChicken_slot);
+    connect(qThread, &QThread::finished, chicken, &Chicken::killChicken_slot);
+
     threads.value(chickenCount)->start();
 
     chickenCount++;
@@ -21,14 +26,15 @@ void Farm::addChicken() {
 
 void Farm::killChicken(const int &id) {
     if (findChicken(id)) {
-        killChicken(chickens.value(id));
+        killChicken(*chickens.value(id));
     } else {
         qDebug() << "No such chicken in this farm. Try killing an other one.";
     }
 }
 
-void Farm::killChicken(Chicken *chicken) {
-    int id = chicken->getId();
+void Farm::killChicken(Chicken &chicken) {
+    int id = chicken.getId();
+
     threads[id]->quit();
     threads[id]->wait();
 
@@ -38,28 +44,23 @@ void Farm::killChicken(Chicken *chicken) {
 
 void Farm::printChicken(const int &id) {
     if (findChicken(id)) {
-        printChicken(chickens.value(id));
+        emit printChicken_signal(id);
     }
 }
 
-void Farm::printChicken(Chicken *chicken) {
-    qDebug() << "Chicken ID:" << chicken->getId() << "eggcount:" << chicken->getEggCount()
-             << "interval:" << chicken->getInterval();
-}
-
 void Farm::printAllChickens() {
-    for (auto *chicken : chickens) {
-        printChicken(chicken);
+    for (auto id : chickens.keys()) {
+        printChicken(id);
     }
 }
 
 void Farm::layEggNow(const int &id) {
-    emit layEgg_signal();
+    emit layEgg_signal(id);
 }
 
 void Farm::killAllChickens() {
-    for (auto *chicken : chickens) {
-        killChicken(chicken);
+    for (auto id : chickens.keys()) {
+        killChicken(*chickens.value(id));
     }
 }
 

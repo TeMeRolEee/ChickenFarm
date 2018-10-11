@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QtCore/QTextStream>
 #include <QtCore/QCoreApplication>
+#include <iostream>
 
 #include "Menu.h"
 #include "cases.h"
@@ -11,18 +12,25 @@ int Menu::menuHandler() {
 }
 
 void Menu::printMenu() {
-    qDebug() << "Available commands:";
-    qDebug() << "0 > EXIT";
-    qDebug() << "1 > Add chicken";
-    qDebug() << "2 <ID> > Kill chicken";
-    qDebug() << "3 > Kill every chicken";
-    qDebug() << "4 > List chickens";
-    qDebug() << "5 <ID> > List a specified chicken";
-    qDebug() << "6 <ID> > Make a chicken lay an egg";
+    std::cout.flush();
+    std::cout << "Available commands:" << std::endl
+    << "0 > EXIT" << std::endl
+    << "1 > Add chicken" << std::endl
+    << "2 <ID> > Kill chicken" << std::endl
+    << "3 > Kill every chicken" << std::endl
+    << "4 > List chickens" << std::endl
+    << "5 <ID> > List a specified chicken" << std::endl
+    << "6 <ID> > Make a chicken lay an egg" << std::endl;
+
 }
 
 int Menu::getInput() {
-    return QTextStream(stdin).readLine().toInt();
+    QTextStream stream(stdin);
+    QString qString = stream.readLine();
+    while(qString == "") {
+        qString = stream.readLine();
+    }
+    return qString.toInt();
 }
 
 

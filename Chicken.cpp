@@ -4,6 +4,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QDateTime>
+#include <iostream>
 
 Chicken::Chicken(const int &id) : id(id) {
     QRandomGenerator generator;
@@ -15,7 +16,6 @@ Chicken::Chicken(const int &id) : id(id) {
 }
 
 Chicken::~Chicken() {
-    qTimer->stop();
     delete qTimer;
 }
 
@@ -30,8 +30,12 @@ int Chicken::getEggCount() const {
 void Chicken::doWork_slot() {
     qTimer = new QTimer();
     qTimer->setInterval(interval);
+
     qDebug() << id << QThread::currentThreadId();
+
     QObject::connect(qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
+    connect(this, &Chicken::printChicken_signal, this, &Chicken::printChicken_slot);
+
     qTimer->start();
 }
 
@@ -41,11 +45,22 @@ int Chicken::getInterval() const {
 
 void Chicken::layEgg_slot() {
     eggCount++;
-    qDebug() << "Chicken ID:" << id << "Egg count:" << eggCount << " threadID:" << QThread::currentThreadId();
+    emit printChicken_signal(id);
 }
 
-void Chicken::getThreadId() {
-    qDebug() << "chicken id:" << id << "threadID:" << QThread::currentThreadId();
+void Chicken::printChicken_slot(const int &id) {
+    if (this->id == id) {
+        std::cout.flush();
+        std::cout << std::endl
+                  << QStringLiteral("--- Chicken: [ id: %0, eggsLayed %1 ] ---").arg(id).arg(eggCount).toStdString()
+                  << std::endl;
+
+    }
 }
+
+void Chicken::killChicken_slot() {
+    qTimer->stop();
+}
+
 
 

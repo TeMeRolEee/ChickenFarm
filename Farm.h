@@ -15,10 +15,7 @@ private:
     bool findChicken(const int &id);
 
 protected:
-    void printChicken(Chicken *chicken);
-
-    void killChicken(Chicken *chicken);
-
+    void killChicken(Chicken &chicken);
 
 public:
     void addChicken();
@@ -34,8 +31,9 @@ public:
     void killAllChickens();
 
 signals:
+    void layEgg_signal(const int &id);
 
-    void layEgg_signal();
+    void printChicken_signal(const int &id);
 };
 
 
