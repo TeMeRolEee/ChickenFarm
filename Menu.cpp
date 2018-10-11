@@ -26,11 +26,16 @@ void Menu::printMenu() {
 
 int Menu::getInput() {
     QTextStream stream(stdin);
-    QString qString = stream.readLine();
-    while(qString == "") {
-        qString = stream.readLine();
+    QString inputString = stream.readLine();
+    while(inputString == "") {
+        inputString = stream.readLine();
     }
-    return qString.toInt();
+    QRegExp regExp("\\d*");
+    if (regExp.exactMatch(inputString)) {
+        return inputString.toInt();
+    }
+
+    return -1;
 }
 
 
