@@ -1,33 +1,39 @@
 #pragma once
 
-#include <QtCore>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtCore/QThread>
 
-class Chicken : public QObject
-{
-    Q_OBJECT
+class Chicken : public QObject {
+Q_OBJECT
+
 private:
-    int interval;
-    QTimer qTimer;
     int id;
-    int eggCount;
+    int interval;
+    int eggCount = 0;
+    QTimer *qTimer;
 
 public:
-    Chicken(int id);
+    Chicken(const int &id);
+    Chicken(const Chicken &otherChicken);
+    Chicken();
+
     ~Chicken();
 
     int getId() const;
-    void setId(int id);
-    int getInterval() const;
+
     int getEggCount() const;
+
+    int getInterval() const;
+
+    void getThreadId();
 
 public slots:
     void doWork_slot();
-    void kill_slot() const;
+
     void layEgg_slot();
-    void layEggNow_slot();
+
 signals:
     void layEgg_signal(const int &value);
-
 };
-
 

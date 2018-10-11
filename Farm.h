@@ -1,28 +1,33 @@
 #pragma once
 
-#include <QtCore>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QThreadPool>
 #include "Chicken.h"
 
-class Farm : public QObject
-{
-    Q_OBJECT
+class Farm : public QObject {
+Q_OBJECT
 private:
     QMap<int, Chicken*> chickens;
     QMap<int, QThread*> threads;
-
-    int idx=0;
-
+    int chickenCount = 0;
 public:
     Farm();
+
     ~Farm();
 
     void addChicken();
-    void killChicken(int id);
-    void showChickens();
+    void killChicken(const int &id);
+    void getChicken(const int &id);
+
+public slots:
+
+    void handleEmits_slot(const int &value);
 
 signals:
-    void doWork();
 
+    void operate_signal();
+    void stopChicken_signal();
 };
 
 
