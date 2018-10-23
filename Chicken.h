@@ -30,15 +30,14 @@ public slots:
 
     void layEgg_slot();
 
-    void printChicken_slot(const int &id);
+    void printChicken_slot();
 
     void killChicken_slot();
 
 signals:
+    void printChicken_signal();
 
-    void printChicken_signal(const int &id);
-
-    void sendNotification_signal(const QString string);
+    void layEgg_signal();
 
 };
 

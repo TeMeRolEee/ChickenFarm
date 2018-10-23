@@ -31,10 +31,9 @@ void Chicken::doWork_slot() {
     qTimer = new QTimer();
     qTimer->setInterval(interval);
 
-    qDebug() << id << QThread::currentThreadId();
-
     QObject::connect(qTimer, &QTimer::timeout, this, &Chicken::layEgg_slot);
     connect(this, &Chicken::printChicken_signal, this, &Chicken::printChicken_slot);
+    connect(this, &Chicken::layEgg_signal, this, &Chicken::layEgg_slot);
 
     qTimer->start();
 }
@@ -45,17 +44,14 @@ int Chicken::getInterval() const {
 
 void Chicken::layEgg_slot() {
     eggCount++;
-    emit printChicken_signal(id);
+    emit printChicken_signal();
 }
 
-void Chicken::printChicken_slot(const int &id) {
-    if (this->id == id) {
+void Chicken::printChicken_slot() {
         std::cout.flush();
         std::cout << std::endl
-                  << QStringLiteral("--- Chicken: [ id: %0, eggsLayed %1 ] ---").arg(id).arg(eggCount).toStdString()
+                  << QStringLiteral("--- Chicken: [ id: %0, egg count: %1 ] ---").arg(id).arg(eggCount).toStdString()
                   << std::endl;
-
-    }
 }
 
 void Chicken::killChicken_slot() {

@@ -14,9 +14,8 @@ void Farm::addChicken() {
 
     chickens.value(chickenCount)->moveToThread(threads.value(chickenCount));
 
-    connect(this, &Farm::layEgg_signal, chicken, &Chicken::layEgg_slot);
     connect(qThread, &QThread::started, chicken, &Chicken::doWork_slot);
-    connect(this, &Farm::printChicken_signal, chicken, &Chicken::printChicken_slot);
+
     connect(qThread, &QThread::finished, chicken, &Chicken::killChicken_slot);
 
     threads.value(chickenCount)->start();
@@ -44,18 +43,20 @@ void Farm::killChicken(Chicken &chicken) {
 
 void Farm::printChicken(const int &id) {
     if (findChicken(id)) {
-        emit printChicken_signal(id);
+        emit chickens.value(id)->printChicken_signal();
     }
 }
 
 void Farm::printAllChickens() {
+    std::cout << "Number of chickens alive is: " << chickens.size() << std::endl;
+
     for (auto id : chickens.keys()) {
         printChicken(id);
     }
 }
 
 void Farm::layEggNow(const int &id) {
-    emit layEgg_signal(id);
+    emit chickens.value(id)->layEgg_signal();
 }
 
 void Farm::killAllChickens() {

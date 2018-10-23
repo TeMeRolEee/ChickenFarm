@@ -30,10 +30,6 @@ public:
 
     void killAllChickens();
 
-signals:
-    void layEgg_signal(const int &id);
-
-    void printChicken_signal(const int &id);
 };
 
 
