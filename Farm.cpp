@@ -27,7 +27,7 @@ void Farm::killChicken(const int &id) {
     if (findChicken(id)) {
         killChicken(*chickens.value(id));
     } else {
-        qDebug() << "No such chicken in this farm. Try killing an other one.";
+        std::cout << "No such chicken in this farm. Try killing an other one." << std::endl;
     }
 }
 
@@ -56,7 +56,11 @@ void Farm::printAllChickens() {
 }
 
 void Farm::layEggNow(const int &id) {
-    emit chickens.value(id)->layEgg_signal();
+	if (findChicken(id)) {
+		emit chickens.value(id)->layEgg_signal();
+	} else {
+		std::cout << "Error, couldn't find the specified chicken" << std::endl;
+	}
 }
 
 void Farm::killAllChickens() {

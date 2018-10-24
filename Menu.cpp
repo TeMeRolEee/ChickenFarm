@@ -16,12 +16,11 @@ void Menu::printMenu() {
     std::cout << "Available commands:" << std::endl
     << "0 > EXIT" << std::endl
     << "1 > Add chicken" << std::endl
-    << "2 <ID> > Kill chicken" << std::endl
+    << "2 > Kill chicken <ID>" << std::endl
     << "3 > Kill every chicken" << std::endl
     << "4 > List chickens" << std::endl
-    << "5 <ID> > List a specified chicken" << std::endl
-    << "6 <ID> > Make a chicken lay an egg" << std::endl;
-
+    << "5 > List a specified chicken <ID>" << std::endl
+    << "6 > Make a chicken lay an egg <ID>" << std::endl;
 }
 
 int Menu::getInput() {
